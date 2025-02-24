@@ -1,20 +1,25 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Messages from './Messages'
 import MessageInput from './MessageInput'
 import {TiMessages} from 'react-icons/ti'
+import useConversiation from '../../zustand/useConversiation'
 
 
 const MessageContainer = () => {
-  const noChatSelected=true
+  const {selectedConversiation,setSelectedConversiation}=useConversiation();
+  // useEffect(()=>{
+  //   //cleanup function(unmounts )
+  //   return ()=>setSelectedConversiation(null);
+  // },[selectedConversiation])
   return (
     <div className='md:min-w-[450px] flex flex-col'>
-      {noChatSelected?(<NoChatSelected/>):
+      {!selectedConversiation?(<NoChatSelected/>):
       (
         <>
         {/* Header */}
         <div className='bg-slate-500 px-4 py-2 mb-2'>
           <span className='label-text'>To:</span>{" "}
-          <span className='text-gray-900 font-bold'>Pritam</span>
+          <span className='text-gray-900 font-bold'>{selectedConversiation.fullName}</span>
         </div>
         <Messages/>
         <MessageInput/>
