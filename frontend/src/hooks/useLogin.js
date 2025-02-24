@@ -1,4 +1,3 @@
-// hooks/useLogin.js
 import { useState } from "react";
 import toast from 'react-hot-toast';
 import { useAuthContext } from "../context/AuhContext";
@@ -16,7 +15,10 @@ const useLogin = () => {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ 
+          userName: username, // Changed from username to userName to match backend
+          password 
+        })
       });
 
       const data = await res.json();
@@ -41,8 +43,14 @@ export default useLogin;
 
 function handleInputErrors({ username, password }) {
   if (!username || !password) {
-    toast.error("All fields are required");
+    toast.error("Please fill in all fields");
     return false;
   }
+
+  if (password.length < 6) {
+    toast.error("Password must be at least 6 characters");
+    return false;
+  }
+
   return true;
 }

@@ -8,13 +8,12 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const { loading, login } = useLogin(); // Add the parentheses here
+  const { loading, login } = useLogin();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     await login(username, password);
   };
-
 
   return (
     <div className='flex flex-col items-center justify-center min-w-96 mx-auto'>
@@ -32,7 +31,7 @@ const Login = () => {
               placeholder="Enter Username" 
               className='w-full input input-bordered h-10'
               value={username}
-              onChange={(e)=>setUsername(e.target.value)}
+              onChange={(e) => setUsername(e.target.value.trim())} // Added trim()
             />
           </div>
 
@@ -46,7 +45,7 @@ const Login = () => {
                 placeholder="Enter Password" 
                 className='w-full input input-bordered h-10'
                 value={password}
-                onChange={(e)=>setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <button
                 type="button"
