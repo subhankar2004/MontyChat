@@ -1,13 +1,14 @@
-import { useState } from "react"
+import { useState } from "react";
 import toast from "react-hot-toast";
-
+import { useAuthContext } from "../context/AuhContext";
 const useSignup = () => {
-  const [loading,setLoading]=useState(false);
+  const [loading, setLoading] = useState(false);
+  const { setAuthUser } = useAuthContext(); // Correctly destructure the context
 
   const signup = async ({ fullName, userName, password, confirmPassword, gender }) => {
     const success = handleInputErrors({ fullName, userName, password, confirmPassword, gender });
     if (!success) return;
-  
+
     setLoading(true);
     try {
       const res = await fetch("http://localhost:8000/api/auth/signup", {
@@ -15,16 +16,19 @@ const useSignup = () => {
         headers: {
           "Content-Type": "application/json"
         },
-        credentials: "include", // Add this line
+        credentials: "include",
         body: JSON.stringify({ fullName, userName, password, confirmPassword, gender })
       });
-  
+
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || "An error occurred during signup");
       }
       toast.success("Account created successfully!");
-  
+
+      localStorage.setItem("chat-user", JSON.stringify(data));
+      setAuthUser(data);
+
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -32,8 +36,8 @@ const useSignup = () => {
     }
   };
 
-  return {loading,signup};
-}
+  return { loading, signup };
+};
 
 export default useSignup;
 
