@@ -14,31 +14,34 @@ export const SocketContentProvider = ({ children }) => {
   const { authUser } = useAuthContext();
 
   useEffect(() => {
-    if (authUser) {
-      console.log("🔗 Connecting to socket...");
+    if (!authUser) return;
 
-      const newSocket = io("http://localhost:8000", {
-        query: { userId: authUser._id },
-        withCredentials: true, // ✅ Ensures cookies are sent
-        transports: ["websocket"], // ✅ Ensures WebSocket connection
-      });
+    console.log("🔗 Connecting to socket...");
 
-      newSocket.on("connect", () => {
-        console.log("✅ Socket connected:", newSocket.id);
-      });
+    const newSocket = io("http://localhost:8000", {
+      query: { userId: authUser._id },
+      withCredentials: true,
+      transports: ["websocket"], // ✅ Ensures WebSocket connection
+    });
 
-      // ✅ Use newSocket instead of socket (which is initially null)
-      newSocket.on("getOnlineUsers", (users) => {
-        setOnlineUsers(users);
-      });
+    newSocket.on("connect", () => {
+      console.log("✅ Socket connected:", newSocket.id);
+    });
 
-      setSocket(newSocket);
+    newSocket.on("getOnlineUsers", (users) => {
+      setOnlineUsers(users);
+    });
 
-      return () => {
-        console.log("❌ Disconnecting socket...");
-        newSocket.disconnect();
-      };
-    }
+    newSocket.on("disconnect", () => {
+      console.log("❌ Socket disconnected");
+      setSocket(null);
+    });
+
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+    };
   }, [authUser]);
 
   return (
@@ -49,5 +52,6 @@ export const SocketContentProvider = ({ children }) => {
 };
 
 export default SocketContentProvider;
+
 
 
