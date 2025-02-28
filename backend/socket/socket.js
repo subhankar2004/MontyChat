@@ -13,6 +13,11 @@ const io=new Server(server,{
   }
 });
 
+// map for connected user 
+
+// check if the reciever is online 
+
+//map[udif],rmit({mrd})
 export const getReceiverSocketId=(receiverId)=>{
   return userSocketMap[receiverId];
 }
