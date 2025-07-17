@@ -1,5 +1,5 @@
 import { useState } from "react";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuhContext";
 
 const useLogin = () => {
@@ -12,13 +12,14 @@ const useLogin = () => {
 
     setLoading(true);
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch("http://localhost:8000/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ 
-          userName: username, // Changed from username to userName to match backend
-          password 
-        })
+          userName: username,
+          password,
+        }),
       });
 
       const data = await res.json();
@@ -28,7 +29,6 @@ const useLogin = () => {
 
       localStorage.setItem("chat-user", JSON.stringify(data));
       setAuthUser(data);
-
     } catch (error) {
       toast.error(error.message);
     } finally {
