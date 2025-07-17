@@ -24,5 +24,8 @@
     "nodemon": "^3.1.9",
     "socket.io": "^4.8.1",
     "tailwindcss": "^4.0.6"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.6.0"
   }
 }
